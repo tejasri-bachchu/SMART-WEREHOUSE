@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LogiForce AI - Smart Warehouse Operations Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>LogiForce <span>AI</span></h1>
+          <span class="logo-subtitle">Warehouse Control Room</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#overview" class="nav-item active" data-tab="overview">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          Overview Dashboard
+        </a>
+        <a href="#warehouse" class="nav-item" data-tab="warehouse">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+          Warehouse Floor Map
+        </a>
+        <a href="#inventory" class="nav-item" data-tab="inventory">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Inventory Control
+        </a>
+        <a href="#orders" class="nav-item" data-tab="orders">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          Order Pipeline
+        </a>
+        <a href="#analytics" class="nav-item" data-tab="analytics">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Operational Analytics
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="simulation-status">
+          <span class="status-dot pulsing"></span>
+          <span>Simulation Active</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Control Bar -->
+      <header class="top-bar">
+        <div class="header-title">
+          <h2 id="current-view-title">Overview Dashboard</h2>
+          <p class="view-description">Real-time monitoring and smart scheduling hub</p>
+        </div>
+
+        <div class="controls-panel">
+          <!-- Simulation Speed -->
+          <div class="sim-speed-control">
+            <span class="control-label">Speed:</span>
+            <div class="btn-group">
+              <button class="btn-sm active" id="btn-speed-pause">Pause</button>
+              <button class="btn-sm" id="btn-speed-1x">1x</button>
+              <button class="btn-sm" id="btn-speed-2x">2x</button>
+              <button class="btn-sm" id="btn-speed-5x">5x</button>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn-primary" id="btn-trigger-order">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M12 5v14M5 12h14"/></svg>
+              Generate Order
+            </button>
+            <button class="btn-secondary" id="btn-trigger-restock">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Restock All
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="view-container">
+
+        <!-- VIEW: OVERVIEW -->
+        <section id="view-overview" class="view-panel active">
+          <!-- Stats Summary -->
+          <div class="stats-grid">
+            <div class="stat-card glass-panel">
+              <div class="stat-icon alert-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Active Exceptions</h3>
+                <p class="stat-val text-danger" id="stat-active-exceptions">0</p>
+                <span class="stat-sub text-danger">Requires Action</span>
+              </div>
+            </div>
+            
+            <div class="stat-card glass-panel">
+              <div class="stat-icon pipeline-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Fulfillment Queue</h3>
+                <p class="stat-val" id="stat-active-orders">0</p>
+                <span class="stat-sub text-warning" id="stat-unallocated-orders">0 Pending Allocation</span>
+              </div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-icon fulfilled-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Dispatched Today</h3>
+                <p class="stat-val" id="stat-dispatched-orders">0</p>
+                <span class="stat-sub text-success" id="stat-fulfillment-rate">100% Rate</span>
+              </div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-icon stock-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Stock Alerts</h3>
+                <p class="stat-val text-warning" id="stat-low-stock">0</p>
+                <span class="stat-sub" id="stat-total-sku">0 SKUs Monitored</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mid Section: Simulator Grid Quick View & Active Pickers -->
+          <div class="dashboard-mid-grid">
+            
+            <!-- Floor Map Minimap -->
+            <div class="glass-panel floor-minimap-card">
+              <div class="panel-header">
+                <h3>Live Warehouse Grid</h3>
+                <button class="btn-link" id="lnk-view-full-map">Full Screen Map →</button>
+              </div>
+              <div class="minimap-grid-container" id="minimap-grid">
+                <!-- Mini grid injected here -->
+              </div>
+              <div class="map-legend">
+                <span class="legend-item"><span class="legend-dot rack-electronics"></span>Electronics</span>
+                <span class="legend-item"><span class="legend-dot rack-apparel"></span>Apparel</span>
+                <span class="legend-item"><span class="legend-dot rack-medical"></span>Medical</span>
+                <span class="legend-item"><span class="legend-dot rack-food"></span>Food</span>
+                <span class="legend-item"><span class="legend-dot agent-dot"></span>Picker Agent</span>
+              </div>
+            </div>
+
+            <!-- Active Pickers & Operations Feed -->
+            <div class="glass-panel operations-feed-card">
+              <div class="panel-header">
+                <h3>Operations Feed</h3>
+                <span class="badge" id="feed-count">0 messages</span>
+              </div>
+              <div class="feed-container" id="overview-feed">
+                <!-- Live logs inject here -->
+                <div class="empty-state">No operations in progress. Start simulation to begin.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Warehouse Health Overview & Allocation Metrics -->
+          <div class="dashboard-bottom-grid">
+            <div class="glass-panel stats-kpi-breakdown">
+              <h3>Fulfillment Bottleneck Analyzer</h3>
+              <div class="bottleneck-chart-container">
+                <div class="bottleneck-bars" id="bottleneck-bars-container">
+                  <!-- Bars showing delay by stage -->
+                  <div class="bar-group">
+                    <span class="bar-label">Allocation</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div>
+                    <span class="bar-val">1.2s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass-panel priority-allocator-rules">
+              <h3>Smart Prioritization Rules</h3>
+              <div class="rules-list">
+                <div class="rule-row">
+                  <div class="rule-badge VIP">VIP</div>
+                  <div class="rule-text">VIP client order score receives a +50 weight bonus.</div>
+                </div>
+                <div class="rule-row">
+                  <div class="rule-badge Urgent">Urgent</div>
+                  <div class="rule-text">Express shipment orders auto-escalate to priority value 100.</div>
+                </div>
+                <div class="rule-row">
+                  <div class="rule-badge Queue">Aging</div>
+                  <div class="rule-text">Orders waiting in queue gain +1 point of priority weight per second.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: WAREHOUSE FLOOR MAP -->
+        <section id="view-warehouse" class="view-panel">
+          <div class="floor-map-layout">
+            <!-- Left Panel: Grid and Legends -->
+            <div class="map-left-panel">
+              <div class="glass-panel visual-grid-card">
+                <div class="grid-header-actions">
+                  <div class="grid-title-info">
+                    <h3>2D Operations Grid</h3>
+                    <p class="sub-text">Click racks to view inventory or click picker agents to inspect their route path.</p>
+                  </div>
+                </div>
+                
+                <!-- Main Warehouse Interactive Grid -->
+                <div class="main-grid-outer">
+                  <div class="main-warehouse-grid" id="warehouse-interactive-grid">
+                    <!-- Dynamic grid elements generated via JS -->
+                  </div>
+                </div>
+
+                <div class="map-detailed-legend">
+                  <div class="legend-col">
+                    <h4>Warehouse Zones</h4>
+                    <div class="leg-row"><span class="leg-box rack-electronics"></span> Electronics Zone (Aisles 1-2)</div>
+                    <div class="leg-row"><span class="leg-box rack-apparel"></span> Apparel Zone (Aisles 3-4)</div>
+                    <div class="leg-row"><span class="leg-box rack-medical"></span> Medical Zone (Aisles 5-6)</div>
+                    <div class="leg-row"><span class="leg-box rack-food"></span> Food & Grocery (Aisles 7-8)</div>
+                  </div>
+                  <div class="legend-col">
+                    <h4>Stations & Docks</h4>
+                    <div class="leg-row"><span class="leg-box zone-packing"></span> Packing & Inspection Bay</div>
+                    <div class="leg-row"><span class="leg-box zone-dispatch"></span> Shipping & Dispatch Dock</div>
+                    <div class="leg-row"><span class="leg-box grid-path-indicator"></span> Optimized Picking Path</div>
+                  </div>
+                  <div class="legend-col">
+                    <h4>Picker States</h4>
+                    <div class="leg-row"><span class="leg-circle state-idle"></span> Idle (Waiting at Hub)</div>
+                    <div class="leg-row"><span class="leg-circle state-picking"></span> Active Picking Route</div>
+                    <div class="leg-row"><span class="leg-circle state-returning"></span> Transferring to Packing</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Panel: Inspector Panel -->
+            <aside class="map-right-panel glass-panel" id="map-inspector">
+              <div class="inspector-header">
+                <h3>Logistics Inspector</h3>
+                <span class="inspector-badge" id="inspector-type">Warehouse Floor</span>
+              </div>
+              <div class="inspector-content" id="inspector-body">
+                <div class="empty-state">Click any grid item to inspect active metrics, stock capacity, or picker state.</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- VIEW: INVENTORY CONTROL -->
+        <section id="view-inventory" class="view-panel">
+          <div class="glass-panel inventory-card">
+            <div class="inventory-toolbar">
+              <div class="search-filters">
+                <input type="text" id="inventory-search" placeholder="Search by SKU, item name or location...">
+                <select id="inventory-filter-category">
+                  <option value="all">All Categories</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="apparel">Apparel</option>
+                  <option value="medical">Medical</option>
+                  <option value="food">Food</option>
+                </select>
+                <select id="inventory-filter-stock">
+                  <option value="all">All Stock Statuses</option>
+                  <option value="low">Low Stock (&lt; 15 units)</option>
+                  <option value="out">Out of Stock (0 units)</option>
+                  <option value="healthy">Healthy Stock</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table" id="inventory-table">
+                <thead>
+                  <tr>
+                    <th>SKU ID</th>
+                    <th>Product Item</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Current Qty</th>
+                    <th>Capacity</th>
+                    <th>Status Meter</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                  <!-- Row items injected here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: ORDER PIPELINE -->
+        <section id="view-orders" class="view-panel">
+          <div class="pipeline-board">
+            
+            <!-- STAGE 1: PENDING ALLOCATION -->
+            <div class="pipeline-column" data-stage="created">
+              <div class="column-header">
+                <h3>1. Created</h3>
+                <span class="count-badge" id="count-stage-created">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-created"></div>
+            </div>
+
+            <!-- STAGE 2: INVENTORY ALLOCATED -->
+            <div class="pipeline-column" data-stage="allocated">
+              <div class="column-header">
+                <h3>2. Allocated</h3>
+                <span class="count-badge" id="count-stage-allocated">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-allocated"></div>
+            </div>
+
+            <!-- STAGE 3: PICKING -->
+            <div class="pipeline-column" data-stage="picking">
+              <div class="column-header">
+                <h3>3. Picking</h3>
+                <span class="count-badge" id="count-stage-picking">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-picking"></div>
+            </div>
+
+            <!-- STAGE 4: PACKING -->
+            <div class="pipeline-column" data-stage="packing">
+              <div class="column-header">
+                <h3>4. Packing</h3>
+                <span class="count-badge" id="count-stage-packing">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-packing"></div>
+            </div>
+
+            <!-- STAGE 5: QUALITY CHECK -->
+            <div class="pipeline-column" data-stage="qc">
+              <div class="column-header">
+                <h3>5. Quality Check</h3>
+                <span class="count-badge" id="count-stage-qc">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-qc"></div>
+            </div>
+
+            <!-- STAGE 6: DISPATCHED -->
+            <div class="pipeline-column" data-stage="dispatched">
+              <div class="column-header">
+                <h3>6. Dispatched</h3>
+                <span class="count-badge" id="count-stage-dispatched">0</span>
+              </div>
+              <div class="pipeline-cards-container" id="lane-dispatched"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: OPERATIONAL ANALYTICS -->
+        <section id="view-analytics" class="view-panel">
+          <div class="analytics-layout">
+            <!-- KPI Blocks -->
+            <div class="analytics-kpi-row">
+              <div class="glass-panel analytic-stat-card">
+                <span class="kpi-label">Average Fulfillment Speed</span>
+                <span class="kpi-value" id="kpi-avg-speed">0.0s</span>
+                <span class="kpi-sub">From order creation to dispatch</span>
+              </div>
+              <div class="glass-panel analytic-stat-card">
+                <span class="kpi-label">QC Accuracy Rate</span>
+                <span class="kpi-value text-success" id="kpi-qc-rate">100.0%</span>
+                <span class="kpi-sub">Items passing Quality Control first time</span>
+              </div>
+              <div class="glass-panel analytic-stat-card">
+                <span class="kpi-label">Priority Exceptions Resolved</span>
+                <span class="kpi-value text-info" id="kpi-resolved-exceptions">0</span>
+                <span class="kpi-sub">Manual decisions recorded</span>
+              </div>
+              <div class="glass-panel analytic-stat-card">
+                <span class="kpi-label">Shortages Automatically Fixed</span>
+                <span class="kpi-value text-warning" id="kpi-stock-saved">0</span>
+                <span class="kpi-sub">Via stock re-allocation rules</span>
+              </div>
+            </div>
+
+            <div class="analytics-charts-grid">
+              
+              <!-- Left Chart: Cumulative Fulfillment Over Time -->
+              <div class="glass-panel chart-card">
+                <h3>Fulfillment Volume (Timeline)</h3>
+                <div class="chart-box" id="analytics-timeline-chart">
+                  <!-- SVG Chart will be injected here -->
+                  <svg viewBox="0 0 500 200" width="100%" height="100%" class="svg-chart" id="svg-timeline">
+                    <!-- Grid Lines -->
+                    <line x1="40" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.05)" />
+                    <line x1="40" y1="70" x2="480" y2="70" stroke="rgba(255,255,255,0.05)" />
+                    <line x1="40" y1="120" x2="480" y2="120" stroke="rgba(255,255,255,0.05)" />
+                    <line x1="40" y1="170" x2="480" y2="170" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                    <!-- Chart Line Placeholder -->
+                    <path d="M 40 170 C 100 160, 200 150, 300 120, 400 90, 480 50" fill="none" stroke="var(--accent-cyan)" stroke-width="3" id="timeline-path"/>
+                    <!-- Axes texts -->
+                    <text x="15" y="175" fill="rgba(255,255,255,0.4)" font-size="10">0</text>
+                    <text x="15" y="125" fill="rgba(255,255,255,0.4)" font-size="10">10</text>
+                    <text x="15" y="75" fill="rgba(255,255,255,0.4)" font-size="10">20</text>
+                    <text x="15" y="25" fill="rgba(255,255,255,0.4)" font-size="10">30</text>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Right Chart: Heatmap stats -->
+              <div class="glass-panel chart-card">
+                <h3>Zone Picking Heatmap (Access Frequency)</h3>
+                <div class="chart-box">
+                  <div class="heatmap-chart-grid" id="heatmap-analytics-grid">
+                    <!-- Small representation of warehouse grid with frequency styling -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- EXCEPTION DECISION MODAL -->
+  <div class="modal-overlay" id="exception-modal">
+    <div class="modal-container glass-panel animate-zoom">
+      
+      <div class="modal-header">
+        <div class="header-icon-wrapper">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" class="text-danger animate-pulse">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="modal-title-desc">
+          <span class="modal-alert-tag">EXCEPTION DETECTED</span>
+          <h2 id="modal-exception-title">Inventory Allocation Shortage</h2>
+        </div>
+      </div>
+
+      <div class="modal-body" id="modal-exception-body">
+        <!-- Content will be injected dynamically depending on exception type -->
+        <p>An exception has stalled order fulfillment. The simulator is paused. Choose a resolution mechanism below:</p>
+      </div>
+
+      <div class="modal-footer" id="modal-exception-actions">
+        <!-- Action buttons will be injected here -->
+        <button class="btn-primary" onclick="window.resolveException('allocate_partial')">Allocate Partial</button>
+        <button class="btn-secondary" onclick="window.resolveException('reallocate_stock')">Reallocate from Low Priority</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Modules -->
+  <script src="inventory.js"></script>
+  <script src="orders.js"></script>
+  <script src="analytics.js"></script>
+  <script src="simulator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
